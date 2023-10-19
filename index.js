@@ -33,10 +33,18 @@ async function run() {
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
+
+const brandsCollection = client.db("brandShopDB").collection("brands");
+
+app.get("/brands", async (req, res) => {
+  const cursor = brandsCollection.find();
+  const result = await cursor.toArray();
+  res.send(result);
+});
 
 app.get("/", (req, res) => {
   res.send("velocity drive is running");
