@@ -108,10 +108,32 @@ app.put("/products/:id", async (req, res) => {
   res.send(result);
 });
 
+//-----------------cart ---------------------------
+
+app.get("/cart", async (req, res) => {
+  const cursor = cartCollection.find();
+  const result = await cursor.toArray();
+  res.send(result);
+});
+
+app.get("/cart/user/:email", async (req, res) => {
+  const email = req.params.email;
+  const query = { email: email };
+  const cursor = cartCollection.find(query);
+  const result = await cursor.toArray();
+  res.send(result);
+});
+
 app.post("/cart", async (req, res) => {
   const cartProducts = req.body;
   console.log(cartProducts);
   const result = await cartCollection.insertOne(cartProducts);
+  res.send(result);
+});
+app.delete("/cart/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) };
+  const result = await cartCollection.deleteOne(query);
   res.send(result);
 });
 
